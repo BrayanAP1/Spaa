@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Renueva Spa - Gestión de Usuarios</title>
+</head>
+<style>
+	:root {
+	  --primary: #7A6A5F;
+	  --primary-dark: #5a4d43;
+	  --primary-light: #9a8a7f;
+	  --secondary: #B8A99D;
+	  --secondary-dark: #98897d;
+	  --secondary-light: #d8c9bd;
+	  --light: #F8F5F2;
+	  --lighter: #FFF;
+	  --text: #3E3E3E;
+	  --text-light: #6E6E6E;
+	  --success: #A5B8A4;
+	  --success-dark: #859884;
+	  --error: #B8A4A5;
+	  --error-dark: #988485;
+	  --border: #D1C7BF;
+	  --shadow: 0 2px 10px rgba(122, 106, 95, 0.1);
+	}
+
+	/* Estilos generales */
+	* {
+	  margin: 0;
+	  padding: 0;
+	  box-sizing: border-box;
+	  transition: all 0.3s ease;
+	}
+
+	body {
+	  font-family: 'Helvetica Neue', Arial, sans-serif;
+	  background-color: var(--light);
+	  color: var(--text);
+	  line-height: 1.6;
+	  padding: 20px;
+	  background-image: linear-gradient(rgba(248, 245, 242, 0.9), rgba(248, 245, 242, 0.9)),
+	                    url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+	  background-size: cover;
+	  background-attachment: fixed;
+	}
+
+	h1, h2, h3 {
+	  color: var(--primary);
+	  font-weight: 300;
+	  margin-bottom: 20px;
+	}
+
+	h1 {
+	  font-size: 28px;
+	  letter-spacing: 1px;
+	  position: relative;
+	  padding-bottom: 10px;
+	  text-align: center;
+	}
+
+	h1:after {
+	  content: '';
+	  position: absolute;
+	  bottom: 0;
+	  left: 50%;
+	  transform: translateX(-50%);
+	  width: 50px;
+	  height: 2px;
+	  background: var(--secondary);
+	}
+
+	h1:hover:after {
+	  width: 70px;
+	  background: var(--primary);
+	}
+
+	h2 {
+	  font-size: 22px;
+	  margin: 40px 0 20px;
+	  text-align: center;
+	}
+
+	/* Contenedores */
+	.container {
+	  max-width: 1200px;
+	  margin: 0 auto;
+	  padding: 0 15px;
+	}
+
+	.register-container {
+	  max-width: 500px;
+	  margin: 30px auto;
+	  padding: 30px;
+	  background: var(--lighter);
+	  border-radius: 12px;
+	  box-shadow: var(--shadow);
+	}
+
+	.register-container:hover {
+	  box-shadow: 0 8px 25px rgba(122, 106, 95, 0.15);
+	}
+
+	/* Tablas */
+	table {
+	  width: 100%;
+	  border-collapse: separate;
+	  border-spacing: 0;
+	  background: var(--lighter);
+	  border-radius: 12px;
+	  overflow: hidden;
+	  box-shadow: var(--shadow);
+	  margin: 20px 0;
+	}
+
+	th {
+	  background-color: var(--primary);
+	  color: white;
+	  padding: 12px;
+	  text-align: center;
+	  font-weight: 400;
+	  position: sticky;
+	  top: 0;
+	}
+
+	td {
+	  padding: 12px;
+	  border-bottom: 1px solid var(--border);
+	  text-align: center;
+	}
+
+	tr:last-child td {
+	  border-bottom: none;
+	}
+
+	tr:hover td {
+	  background-color: rgba(184, 169, 157, 0.1);
+	}
+
+	/* Formularios e inputs */
+	input, select, button {
+	  width: 100%;
+	  padding: 12px 15px;
+	  margin: 8px 0;
+	  border-radius: 6px;
+	  font-size: 15px;
+	  border: 1px solid var(--secondary);
+	}
+
+	input:focus, select:focus {
+	  outline: none;
+	  border-color: var(--primary);
+	  box-shadow: 0 0 0 2px rgba(122, 106, 95, 0.2);
+	}
+
+	input[type="date"], 
+	input[type="time"] {
+	  padding: 10px 12px;
+	}
+
+	select {
+	  appearance: none;
+	  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	  background-repeat: no-repeat;
+	  background-position: right 10px center;
+	  background-size: 15px;
+	}
+
+	/* Botones */
+	button {
+	  background-color: var(--primary);
+	  color: white;
+	  border: none;
+	  cursor: pointer;
+	  letter-spacing: 0.5px;
+	  font-weight: 500;
+	}
+
+	button:hover {
+	  background-color: var(--primary-dark);
+	  transform: translateY(-2px);
+	}
+
+	.btn-secondary {
+	  background-color: var(--secondary);
+	}
+
+	.btn-secondary:hover {
+	  background-color: var(--secondary-dark);
+	}
+
+	.btn-success {
+	  background-color: var(--success);
+	}
+
+	.btn-success:hover {
+	  background-color: var(--success-dark);
+	}
+
+	.btn-error {
+	  background-color: var(--error);
+	}
+
+	.btn-error:hover {
+	  background-color: var(--error-dark);
+	}
+
+	.btn-small {
+	  padding: 8px 12px;
+	  font-size: 14px;
+	  margin: 0 5px;
+	  width: auto;
+	  display: inline-flex;
+	  align-items: center;
+	  justify-content: center;
+	}
+
+	.btn-small i {
+	  margin-right: 5px;
+	}
+
+	/* Mensajes */
+	#mensaje, #mensaje-citas {
+	  padding: 12px;
+	  margin: 15px 0;
+	  border-radius: 6px;
+	  text-align: center;
+	  font-size: 14px;
+	  display: block;
+	}
+
+	.success {
+	  background-color: rgba(165, 184, 164, 0.3);
+	  color: #2F4A2E;
+	  border: 1px solid var(--success);
+	}
+
+	.error {
+	  background-color: rgba(184, 164, 165, 0.3);
+	  color: #6E3C3E;
+	  border: 1px solid var(--error);
+	}
+
+	/* Estado de carga */
+	#cargando-citas {
+	  text-align: center;
+	  padding: 15px;
+	  color: var(--text-light);
+	  font-style: italic;
+	  display: none;
+	}
+
+	.spinner {
+	  border: 3px solid rgba(122, 106, 95, 0.1);
+	  border-radius: 50%;
+	  border-top: 3px solid var(--primary);
+	  width: 20px;
+	  height: 20px;
+	  animation: spin 1s linear infinite;
+	  display: inline-block;
+	  margin-right: 10px;
+	  vertical-align: middle;
+	}
+
+	@keyframes spin {
+	  0% { transform: rotate(0deg); }
+	  100% { transform: rotate(360deg); }
+	}
+
+	/* Elementos específicos de citas */
+	.input-cita, .select-cita {
+	  margin: 0;
+	  background: transparent;
+	  border: 1px solid transparent;
+	  text-align: center;
+	  padding: 8px;
+	  transition: none;
+	}
+
+	.input-cita:hover, 
+	.input-cita:focus,
+	.select-cita:hover,
+	.select-cita:focus {
+	  background: white;
+	  border: 1px solid var(--secondary);
+	}
+
+	.acciones {
+	  white-space: nowrap;
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+	  body {
+	    padding: 10px;
+	  }
+
+	  .register-container {
+	    padding: 20px;
+	    margin: 20px 10px;
+	  }
+
+	  table {
+	    font-size: 14px;
+	  }
+
+	  th, td {
+	    padding: 8px 10px;
+	  }
+
+	  input, select, button {
+	    padding: 10px 12px;
+	  }
+
+	  .btn-small {
+	    padding: 6px 8px;
+	    font-size: 12px;
+	    margin: 2px;
+	  }
+	}
+
+	@media (max-width: 480px) {
+	  h1 {
+	    font-size: 24px;
+	  }
+
+	  h2 {
+	    font-size: 20px;
+	  }
+
+	  .acciones {
+	    display: flex;
+	    flex-direction: column;
+	  }
+
+	  .btn-small {
+	    width: 100%;
+	    margin: 2px 0;
+	  }
+	}
+  </style>
+<body>
+
+  <div class="register-container">
+    <h1>Renueva Spa</h1>
+    <form id="registerForm">
+      <input type="text" id="nombre" placeholder="Nombre" required>
+      <input type="email" id="correo" placeholder="Correo" required>
+      <input type="password" id="contraseña" placeholder="Contraseña" required>
+      <button type="submit">Registrar Usuario</button>
+    </form>
+    <a href="/"><button>Cerrar Sesión</button></a>
+    <p id="mensaje"></p>
+  </div>
+
+  <h2>Lista de Usuarios</h2>
+  <table id="usuariosTable">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="usuariosBody"></tbody>
+  </table>
+
+  <h2>Lista de Horarios de Espcialista</h2>
+  <table id="especialistasTable">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Horario</th>
+      </tr>
+    </thead>
+    <tbody id="especialistasBody"></tbody>
+  </table>
+  
+  <div id="mensaje-citas" class="mensaje"></div>
+  <div id="cargando-citas">Cargando citas...</div>
+
+  <h2>Lista de Citas</h2>
+  <table id="citasTable">
+	
+    <thead>
+      <tr>
+        <th>Servicio</th>
+        <th>Especialista</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Cliente</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="citasBody"></tbody>
+  </table>
+
+  
+  <script>
+	// Función principal para cargar las citas
+	  async function cargarCitas() {
+	    try {
+	      mostrarCargando(true);
+	      const response = await fetch("/api/citas");
+	      
+	      if (!response.ok) {
+	        throw new Error(`Error ${response.status}: ${response.statusText}`);
+	      }
+	      
+	      const citas = await response.json();
+	      const tbody = document.querySelector("#citasBody");
+	      tbody.innerHTML = "";
+
+	      if (!citas || citas.length === 0) {
+	        const fila = document.createElement("tr");
+	        fila.innerHTML = `<td colspan="7" style="text-align: center;">No hay citas registradas</td>`;
+	        tbody.appendChild(fila);
+	        return;
+	      }
+
+	      // Cargar servicios y especialistas primero para los selects
+	      const [servicios, especialistas] = await Promise.all([
+	        fetch("/api/servicios").then(res => res.json()),
+	        fetch("/api/especialistas").then(res => res.json())
+	      ]);
+
+	      citas.forEach(cita => {
+	        const fila = document.createElement("tr");
+	        
+	        fila.innerHTML = `
+	          <td>
+	            <select id="servicioId-${cita.id}" disabled class="select-cita">
+	              <option value="">Cargando servicios...</option>
+	            </select>
+	          </td>
+	          <td>
+	            <select id="especialistaId-${cita.id}" disabled class="select-cita">
+	              <option value="">Cargando especialistas...</option>
+	            </select>
+	          </td>
+	          <td><input type="date" id="fecha-${cita.id}" value="${cita.fecha}" disabled class="input-cita"></td>
+	          <td><input type="time" id="hora-${cita.id}" value="${formatearHora(cita.hora)}" disabled class="input-cita"></td>
+	          <td><input type="text" id="clienteNombre-${cita.id}" value="${cita.clienteNombre}" disabled class="input-cita"></td>
+	          <td><input type="tel" id="clienteTelefono-${cita.id}" value="${cita.clienteTelefono}" disabled class="input-cita"></td>
+	          <td class="acciones">
+	            <button class="btn-editar" onclick="activarEdicionCita('${cita.id}')">
+	              <i class="fas fa-edit"></i> Reprogramar
+	            </button> <br>
+	            <button class="btn-guardar" onclick="guardarEdicionCita('${cita.id}')" style="display:none;" id="guardarCita-${cita.id}">
+	              <i class="fas fa-save"></i> Guardar
+	            </button>
+	            <button class="btn-eliminar" onclick="eliminarCita('${cita.id}')">
+	              <i class="fas fa-trash"></i> Cancelar
+	            </button>
+	          </td>
+	        `;
+
+	        tbody.appendChild(fila);
+	        
+	        // Llenar los selects con las opciones reales
+	        llenarSelectServicios(cita.id, cita.servicioId, servicios);
+	        llenarSelectEspecialistas(cita.id, cita.especialistaId, especialistas);
+	      });
+	      
+	    } catch (error) {
+	      console.error("Error al cargar citas:", error);
+	      mostrarMensaje(`Error al cargar citas: ${error.message}`, "error");
+	    } finally {
+	      mostrarCargando(false);
+	    }
+	  }
+
+	  // Función para llenar el select de servicios
+	  function llenarSelectServicios(citaId, servicioSeleccionadoId, servicios) {
+	    const select = document.getElementById(`servicioId-${citaId}`);
+	    if (!select) return;
+
+	    select.innerHTML = servicios.map(servicio => 
+	      `<option value="${servicio.id}" ${servicio.id === servicioSeleccionadoId ? 'selected' : ''}>
+	        ${servicio.nombre}
+	      </option>`
+	    ).join('');
+	  }
+
+	  // Función para llenar el select de especialistas
+	  function llenarSelectEspecialistas(citaId, especialistaSeleccionadoId, especialistas) {
+	    const select = document.getElementById(`especialistaId-${citaId}`);
+	    if (!select) return;
+
+	    select.innerHTML = especialistas.map(especialista => 
+	      `<option value="${especialista.id}" ${especialista.id === especialistaSeleccionadoId ? 'selected' : ''}>
+	        ${especialista.nombre}
+	      </option>`
+	    ).join('');
+	  }
+
+	  // Función para activar la edición de una cita
+	  function activarEdicionCita(id) {
+	    // Deshabilitar cualquier otra edición en curso
+	    document.querySelectorAll('.select-cita:not(:disabled), .input-cita:not(:disabled)').forEach(elemento => {
+	      elemento.disabled = true;
+	    });
+	    document.querySelectorAll('.btn-guardar:not([style*="none"])').forEach(boton => {
+	      boton.style.display = "none";
+	    });
+
+	    // Habilitar los campos de esta cita
+	    document.getElementById(`servicioId-${id}`).disabled = false;
+	    document.getElementById(`especialistaId-${id}`).disabled = false;
+	    document.getElementById(`fecha-${id}`).disabled = false;
+	    document.getElementById(`hora-${id}`).disabled = false;
+	    document.getElementById(`clienteNombre-${id}`).disabled = false;
+	    document.getElementById(`clienteTelefono-${id}`).disabled = false;
+	    document.getElementById(`guardarCita-${id}`).style.display = "inline-block";
+	  }
+
+	  // Función para guardar los cambios de una cita
+	  async function guardarEdicionCita(id) {
+	    try {
+	      mostrarCargando(true);
+	      
+	      const citaActualizada = {
+	        id: id,
+	        servicioId: document.getElementById(`servicioId-${id}`).value,
+	        especialistaId: document.getElementById(`especialistaId-${id}`).value,
+	        fecha: document.getElementById(`fecha-${id}`).value,
+	        hora: document.getElementById(`hora-${id}`).value,
+	        clienteNombre: document.getElementById(`clienteNombre-${id}`).value,
+	        clienteTelefono: document.getElementById(`clienteTelefono-${id}`).value
+	      };
+
+	      // Validación básica
+	      if (!validarCita(citaActualizada)) {
+	        return;
+	      }
+
+	      const response = await fetch(`/api/citas/${id}`, {
+	        method: "PUT",
+	        headers: { 
+	          "Content-Type": "application/json",
+	          "X-Requested-With": "XMLHttpRequest"
+	        },
+	        body: JSON.stringify(citaActualizada)
+	      });
+
+	      if (!response.ok) {
+	        const errorData = await response.json().catch(() => ({}));
+	        throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+	      }
+
+	      mostrarMensaje("Cita actualizada correctamente", "success");
+	      cargarCitas();
+	      
+	    } catch (error) {
+	      console.error("Error al guardar cita:", error);
+	      mostrarMensaje(`Error al actualizar cita: ${error.message}`, "error");
+	    } finally {
+	      mostrarCargando(false);
+	    }
+	  }
+
+	  // Función para eliminar una cita
+	  async function eliminarCita(id) {
+	    try {
+	      if (!confirm("¿Estás seguro de que deseas eliminar esta cita? Esta acción no se puede deshacer.")) {
+	        return;
+	      }
+	      
+	      mostrarCargando(true);
+	      const response = await fetch(`/api/citas/${id}`, { 
+	        method: "DELETE",
+	        headers: { 
+	          "X-Requested-With": "XMLHttpRequest"
+	        }
+	      });
+	      
+	      if (!response.ok) {
+	        const errorData = await response.json().catch(() => ({}));
+	        throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+	      }
+	      
+	      mostrarMensaje("Cita eliminada correctamente", "success");
+	      cargarCitas();
+	      
+	    } catch (error) {
+	      console.error("Error al eliminar cita:", error);
+	      mostrarMensaje(`Error al eliminar cita: ${error.message}`, "error");
+	    } finally {
+	      mostrarCargando(false);
+	    }
+	  }
+
+	  // Función para validar los datos de la cita
+	  function validarCita(cita) {
+	    if (!cita.servicioId) {
+	      mostrarMensaje("Debe seleccionar un servicio", "error");
+	      return false;
+	    }
+	    if (!cita.especialistaId) {
+	      mostrarMensaje("Debe seleccionar un especialista", "error");
+	      return false;
+	    }
+	    if (!cita.fecha) {
+	      mostrarMensaje("Debe ingresar una fecha", "error");
+	      return false;
+	    }
+	    if (!cita.hora) {
+	      mostrarMensaje("Debe ingresar una hora", "error");
+	      return false;
+	    }
+	    if (!cita.clienteNombre || cita.clienteNombre.trim().length < 3) {
+	      mostrarMensaje("El nombre del cliente debe tener al menos 3 caracteres", "error");
+	      return false;
+	    }
+	    if (!cita.clienteTelefono || !/^[\d\s+-]{7,}$/.test(cita.clienteTelefono)) {
+	      mostrarMensaje("Ingrese un número de teléfono válido", "error");
+	      return false;
+	    }
+	    return true;
+	  }
+
+	  // Función para formatear la hora (asegurar formato HH:MM)
+	  function formatearHora(hora) {
+	    if (!hora) return "";
+	    // Si ya está en formato HH:MM, devolverlo tal cual
+	    if (/^\d{2}:\d{2}$/.test(hora)) return hora;
+	    
+	    // Intentar convertir formatos como "10:30 AM" a "10:30"
+	    const match = hora.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+	    if (match) {
+	      let hh = parseInt(match[1]);
+	      const mm = match[2];
+	      const periodo = match[3] ? match[3].toUpperCase() : null;
+	      
+	      if (periodo === "PM" && hh < 12) hh += 12;
+	      if (periodo === "AM" && hh === 12) hh = 0;
+	      
+	      return `${hh.toString().padStart(2, '0')}:${mm}`;
+	    }
+	    
+	    return hora; // Devolver original si no se pudo convertir
+	  }
+
+	  // Función para mostrar mensajes al usuario
+	  function mostrarMensaje(texto, tipo) {
+	    const mensaje = document.getElementById("mensaje-citas");
+	    if (!mensaje) return;
+	    
+	    mensaje.textContent = texto;
+	    mensaje.className = `mensaje ${tipo}`;
+	    mensaje.style.display = "block";
+	    
+	    setTimeout(() => {
+	      mensaje.style.opacity = "0";
+	      setTimeout(() => {
+	        mensaje.style.display = "none";
+	        mensaje.style.opacity = "1";
+	      }, 500);
+	    }, 3000);
+	  }
+
+	  // Función para mostrar/ocultar indicador de carga
+	  function mostrarCargando(mostrar) {
+	    const cargando = document.getElementById("cargando-citas");
+	    if (cargando) {
+	      cargando.style.display = mostrar ? "block" : "none";
+	    }
+	  }
+
+	  // Cargar citas cuando la página esté lista
+	  document.addEventListener("DOMContentLoaded", function() {
+	    cargarCitas();
+	    
+	    // Opcional: Recargar cada 60 segundos para mantener datos actualizados
+	    setInterval(cargarCitas, 60000);
+	  });
+    async function cargarUsuarios() {
+      const response = await fetch("/api/usuarios");
+      const usuarios = await response.json();
+      const tbody = document.querySelector("#usuariosBody");
+      tbody.innerHTML = "";
+
+      usuarios.forEach(usuario => {
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+          <td><input id="nombre-${usuario.id}" value="${usuario.nombre}" disabled></td>
+          <td><input id="correo-${usuario.id}" value="${usuario.correo}" disabled></td>
+          <td>
+            <button onclick="activarEdicion('${usuario.id}')">Editar</button>
+            <button onclick="guardarEdicion('${usuario.id}')" style="display:none;" id="guardar-${usuario.id}">Guardar</button>
+            <button onclick="eliminarUsuario('${usuario.id}')">Eliminar</button>
+          </td>
+        `;
+
+        tbody.appendChild(fila);
+      });
+    }
+
+    async function eliminarUsuario(id) {
+      await fetch(`/api/usuarios/${id}`, { method: "DELETE" });
+      cargarUsuarios();
+    }
+
+    function activarEdicion(id) {
+      document.getElementById(`nombre-${id}`).disabled = false;
+      document.getElementById(`correo-${id}`).disabled = false;
+      document.getElementById(`guardar-${id}`).style.display = "inline";
+    }
+
+    async function guardarEdicion(id) {
+      const nombre = document.getElementById(`nombre-${id}`).value;
+      const correo = document.getElementById(`correo-${id}`).value;
+
+      const response = await fetch(`/api/usuarios/${id}`);
+      const usuario = await response.json();
+
+      usuario.nombre = nombre;
+      usuario.correo = correo;
+
+      await fetch(`/api/usuarios/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(usuario)
+      });
+
+      cargarUsuarios();
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value;
+      const correo = document.getElementById("correo").value;
+      const contraseña = document.getElementById("contraseña").value;
+
+      const response = await fetch("/api/usuarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, correo, contraseña })
+      });
+
+      const mensaje = document.getElementById("mensaje");
+      if (response.ok) {
+        mensaje.textContent = "Usuario registrado exitosamente.";
+        mensaje.className = "success";
+        document.getElementById("registerForm").reset();
+        cargarUsuarios();
+      } else {
+        mensaje.textContent = "Error al registrar usuario.";
+        mensaje.className = "error";
+      }
+    });
+
+    async function cargarEspecialistas() {
+      const response = await fetch("/api/especialistas");
+      const especialistas = await response.json();
+      const tbody = document.querySelector("#especialistasBody");
+      tbody.innerHTML = "";
+
+      especialistas.forEach(especialista => {
+        const fila = document.createElement("tr");
+        const horarioHtml = especialista.horario && especialista.horario.length
+          ? especialista.horario.join('<br>')
+          : generarHorarioFalso();
+
+        fila.innerHTML = `
+          <td>${especialista.nombre}</td>
+          <td>${especialista.correo}</td>
+          <td>${horarioHtml}</td>
+        `;
+
+        tbody.appendChild(fila);
+      });
+    }
+
+    function generarHorarioFalso() {
+      const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+      const horario = [];
+      const usados = new Set();
+      const cantidad = Math.floor(Math.random() * 3) + 2; // 2-4 días
+
+      while (horario.length < cantidad) {
+        const dia = dias[Math.floor(Math.random() * dias.length)];
+        if (usados.has(dia)) continue;
+        usados.add(dia);
+
+        const inicio = Math.floor(Math.random() * 5) + 8; // 08-12
+        const fin = inicio + Math.floor(Math.random() * 4) + 1; // +1 a +4 horas
+        horario.push(`${dia} ${inicio.toString().padStart(2, '0')}:00 - ${fin.toString().padStart(2, '0')}:00`);
+      }
+
+      return horario.join('<br>');
+    }
+
+    // Inicializar al cargar
+    cargarUsuarios();
+    cargarEspecialistas();
+	cargarCitas();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración - Spa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #5D8A7E;
+      --primary-dark: #4A6F65;
+      --primary-light: rgba(93, 138, 126, 0.1);
+      --secondary: #A7C4BC;
+      --light: #F5F9F8;
+      --lighter: #FFFFFF;
+      --text: #2D3748;
+      --text-light: #4A5568;
+      --error: #E53E3E;
+      --error-light: rgba(229, 62, 62, 0.1);
+      --success: #38A169;
+      --success-light: rgba(56, 161, 105, 0.1);
+      --warning: #DD6B20;
+      --warning-light: rgba(221, 107, 32, 0.1);
+      --border: #E2E8F0;
+      --border-radius: 8px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition: all 0.2s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header Styles */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem 0;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header {
+      margin: 2.5rem 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin: 1.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--secondary);
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+      gap: 0.5rem;
+    }
+
+    .btn i {
+      font-size: 0.9em;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background-color: #95B8AD;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-danger {
+      background-color: var(--error);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #C53030;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-icon {
+      padding: 0.5rem;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    /* Form Styles */
+    .card {
+      background-color: var(--lighter);
+      padding: 1.75rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2rem;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--border-radius);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(93, 138, 126, 0.2);
+    }
+
+    input:hover, select:hover {
+      border-color: var(--primary);
+    }
+
+    /* Table Styles */
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 3rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background-color: var(--lighter);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    th {
+      background-color: var(--primary);
+      color: white;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-light);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: var(--primary-light);
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Alert Styles */
+    .alert {
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .alert-success {
+      background-color: var(--success-light);
+      color: var(--success);
+      border-left: 4px solid var(--success);
+    }
+
+    .alert-error {
+      background-color: var(--error-light);
+      color: var(--error);
+      border-left: 4px solid var(--error);
+    }
+
+    .alert-warning {
+      background-color: var(--warning-light);
+      color: var(--warning);
+      border-left: 4px solid var(--warning);
+    }
+
+    /* Utility Classes */
+    .text-muted {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .mt-3 {
+      margin-top: 1.5rem;
+    }
+
+    .mb-3 {
+      margin-bottom: 1.5rem;
+    }
+
+    .d-flex {
+      display: flex;
+    }
+
+    .align-items-center {
+      align-items: center;
+    }
+
+    .justify-content-between {
+      justify-content: space-between;
+    }
+
+    .gap-2 {
+      gap: 0.5rem;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 1.5rem;
+      height: 1.5rem;
+      border: 3px solid rgba(93, 138, 126, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header with Logout -->
+    <header class="page-header">
+      <h1><i class="fas fa-spa"></i> Panel de Administración</h1>
+      <a href="/" class="btn btn-danger">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </a>
+    </header>
+
+    <!-- Specialists Section -->
+    <section>
+      <div class="section-header">
+        <h2><i class="fas fa-user-md"></i> Especialistas</h2>
+      </div>
+
+      <!-- Add Specialist Form -->
+      <div class="card">
+        <h3><i class="fas fa-plus-circle"></i> Agregar Especialista</h3>
+        <form id="especialistaForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ccEspecialista">Cédula</label>
+              <input type="text" id="ccEspecialista" placeholder="Número de cédula" required>
+            </div>
+            <div class="form-group">
+              <label for="nombreEspecialista">Nombre completo</label>
+              <input type="text" id="nombreEspecialista" placeholder="Nombre y apellidos" required>
+            </div>
+            <div class="form-group">
+              <label for="correoEspecialista">Correo electrónico</label>
+              <input type="email" id="correoEspecialista" placeholder="correo@ejemplo.com" required>
+            </div>
+            <div class="form-group">
+              <label for="edadEspecialista">Edad</label>
+              <input type="number" id="edadEspecialista" placeholder="Edad" min="18" max="80" required>
+            </div>
+            <div class="form-group">
+              <label for="contraseñaEspecialista">Contraseña</label>
+              <input type="password" id="contraseñaEspecialista" placeholder="Contraseña segura" required minlength="6">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Guardar Especialista
+          </button>
+        </form>
+      </div>
+
+      <!-- Specialists List -->
+      <h3><i class="fas fa-list"></i> Lista de Especialistas</h3>
+      <div class="table-responsive">
+        <table id="especialistasTable">
+          <thead>
+            <tr>
+              <th>Cédula</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Edad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5" class="text-center">Cargando especialistas...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Receptionists Section -->
+    <section>
+      <div class="section-header">
+        <h2><i class="fas fa-user-tie"></i> Recepcionistas</h2>
+      </div>
+
+      <!-- Add Receptionist Form -->
+      <div class="card">
+        <h3><i class="fas fa-plus-circle"></i> Agregar Recepcionista</h3>
+        <form id="recepcionistaForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ccRecepcionista">Cédula</label>
+              <input type="text" id="ccRecepcionista" placeholder="Número de cédula" required>
+            </div>
+            <div class="form-group">
+              <label for="nombreRecepcionista">Nombre completo</label>
+              <input type="text" id="nombreRecepcionista" placeholder="Nombre y apellidos" required>
+            </div>
+            <div class="form-group">
+              <label for="correoRecepcionista">Correo electrónico</label>
+              <input type="email" id="correoRecepcionista" placeholder="correo@ejemplo.com" required>
+            </div>
+            <div class="form-group">
+              <label for="edadRecepcionista">Edad</label>
+              <input type="number" id="edadRecepcionista" placeholder="Edad" min="18" max="80" required>
+            </div>
+            <div class="form-group">
+              <label for="contraseñaRecepcionista">Contraseña</label>
+              <input type="password" id="contraseñaRecepcionista" placeholder="Contraseña segura" required minlength="6">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Guardar Recepcionista
+          </button>
+        </form>
+      </div>
+
+      <!-- Receptionists List -->
+      <h3><i class="fas fa-list"></i> Lista de Recepcionistas</h3>
+      <div class="table-responsive">
+        <table id="recepcionistasTable">
+          <thead>
+            <tr>
+              <th>Cédula</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Edad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5" class="text-center">Cargando recepcionistas...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Appointments Section -->
+    <section>
+      <div class="section-header">
+        <h2><i class="fas fa-calendar-alt"></i> Citas Programadas</h2>
+      </div>
+
+      <h3><i class="fas fa-calendar-check"></i> Próximas Citas</h3>
+      <div class="table-responsive">
+        <table id="citasTable">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Teléfono</th>
+              <th>Especialista</th>
+              <th>Servicio</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" class="text-center">Cargando citas...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Promotions Section -->
+    <section>
+      <div class="section-header">
+        <h2><i class="fas fa-tags"></i> Promociones</h2>
+      </div>
+
+      <!-- Add Promotion Form -->
+      <div class="card">
+        <h3><i class="fas fa-plus-circle"></i> Crear Promoción</h3>
+        <form id="promocionForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="servicio1">Servicio 1</label>
+              <select id="servicio1" required>
+                <option value="">Seleccione un servicio</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="servicio2">Servicio 2</label>
+              <select id="servicio2" required>
+                <option value="">Seleccione un servicio</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="precioPromocion">Precio Promocional</label>
+              <input type="number" id="precioPromocion" placeholder="Precio total" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label for="fechaLimite">Fecha Límite</label>
+              <input type="date" id="fechaLimite" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Crear Promoción
+          </button>
+        </form>
+      </div>
+
+      <!-- Promotions List -->
+      <h3><i class="fas fa-list"></i> Promociones Activas</h3>
+      <div class="table-responsive">
+        <table id="promocionesTable">
+          <thead>
+            <tr>
+              <th>Servicio 1</th>
+              <th>Servicio 2</th>
+              <th>Precio</th>
+              <th>Válido hasta</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5" class="text-center">Cargando promociones...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Editar Registro</h3>
+        <button onclick="closeModal()" class="btn btn-icon btn-secondary">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="modalBody">
+        <!-- Dynamic content will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal()" class="btn btn-secondary">Cancelar</button>
+        <button onclick="saveChanges()" class="btn btn-primary">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Services Section -->
+      <section>
+        <div class="section-header">
+          <h2><i class="fas fa-concierge-bell"></i> Servicios</h2>
+        </div>
+
+        <!-- Services List -->
+        <div class="table-responsive">
+          <table id="serviciosTable">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Duración</th>
+                <th>Precio</th>
+                <th>Horarios</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="5" class="text-center">Cargando servicios...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+	
+	  <!-- Edit Modal -->
+	    <div id="editModal" class="modal">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h3 id="modalTitle">Editar Servicio</h3>
+	          <button onclick="closeModal()" class="btn btn-icon btn-secondary">
+	            <i class="fas fa-times"></i>
+	          </button>
+	        </div>
+	        <div id="modalBody">
+	          <!-- Dynamic content will be loaded here -->
+	        </div>
+	        <div class="modal-footer">
+	          <button onclick="closeModal()" class="btn btn-secondary">Cancelar</button>
+	          <button onclick="saveChanges()" class="btn btn-primary">Guardar Cambios</button>
+	        </div>
+	      </div>
+	    </div>
+		
+  <script>
+    // Global variables
+    let currentEditingId = null;
+    let currentEditingType = null;
+
+    // ===================== UTILITY FUNCTIONS =====================
+    function showAlert(message, type = 'success') {
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.innerHTML = `
+        <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
+        ${message}
+      `;
+      
+      document.body.prepend(alert);
+      
+      setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 300);
+      }, 5000);
+    }
+
+    function showLoading(button) {
+      button.disabled = true;
+      button.innerHTML = `<span class="spinner"></span> Procesando...`;
+    }
+
+    function hideLoading(button, originalText) {
+      button.disabled = false;
+      button.innerHTML = originalText;
+    }
+
+    function openModal(title, content) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = content;
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').style.display = 'none';
+      currentEditingId = null;
+      currentEditingType = null;
+    }
+
+    async function saveChanges() {
+      // This would be implemented based on what's being edited
+      alert('Función de guardar cambios implementaría la lógica específica');
+      closeModal();
+    }
+
+    // ===================== ESPECIALISTAS =====================
+    async function loadEspecialistas() {
+      try {
+        const response = await fetch('/api/especialistas');
+        if (!response.ok) throw new Error('Error al cargar especialistas');
+        
+        const especialistas = await response.json();
+        const tableBody = document.querySelector('#especialistasTable tbody');
+        
+        if (especialistas.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay especialistas registrados</td></tr>';
+          return;
+        }
+        
+        tableBody.innerHTML = '';
+        especialistas.forEach(especialista => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${especialista.cc || 'N/A'}</td>
+            <td>${especialista.nombre}</td>
+            <td>${especialista.correo}</td>
+            <td>${especialista.edad}</td>
+            <td>
+              <div class="actions">
+                <button onclick="editEspecialista('${especialista.id}')" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-edit"></i> Editar
+                </button>
+                <button onclick="deleteEspecialista('${especialista.id}')" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+              </div>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        document.querySelector('#especialistasTable tbody').innerHTML = `
+          <tr><td colspan="5" class="text-center">Error al cargar los datos</td></tr>
+        `;
+        console.error('Error:', error);
+      }
+    }
+
+    async function deleteEspecialista(id) {
+      if (!confirm('¿Está seguro de que desea eliminar este especialista?')) return;
+      
+      try {
+        const response = await fetch(`/api/especialistas/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Error al eliminar especialista');
+        
+        showAlert('Especialista eliminado correctamente');
+        loadEspecialistas();
+      } catch (error) {
+        showAlert('Error al eliminar especialista', 'error');
+        console.error('Error:', error);
+      }
+    }
+
+    function editEspecialista(id) {
+      // In a real implementation, we would fetch the specialist data
+      currentEditingId = id;
+      currentEditingType = 'especialista';
+      
+      const modalContent = `
+        <form id="editEspecialistaForm">
+          <div class="form-group">
+            <label for="editCc">Cédula</label>
+            <input type="text" id="editCc" value="123456789" required>
+          </div>
+          <div class="form-group">
+            <label for="editNombre">Nombre</label>
+            <input type="text" id="editNombre" value="Nombre del especialista" required>
+          </div>
+          <div class="form-group">
+            <label for="editCorreo">Correo</label>
+            <input type="email" id="editCorreo" value="correo@ejemplo.com" required>
+          </div>
+          <div class="form-group">
+            <label for="editEdad">Edad</label>
+            <input type="number" id="editEdad" value="35" required>
+          </div>
+        </form>
+      `;
+      
+      openModal('Editar Especialista', modalContent);
+    }
+
+    document.querySelector('#especialistaForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      showLoading(submitBtn);
+      
+      try {
+        const especialista = {
+          cc: document.querySelector('#ccEspecialista').value,
+          nombre: document.querySelector('#nombreEspecialista').value,
+          correo: document.querySelector('#correoEspecialista').value,
+          edad: document.querySelector('#edadEspecialista').value,
+          contraseña: document.querySelector('#contraseñaEspecialista').value
+        };
+
+        const response = await fetch('/api/especialistas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(especialista)
+        });
+
+        if (!response.ok) throw new Error('Error al guardar especialista');
+        
+        showAlert('Especialista agregado correctamente');
+        loadEspecialistas();
+        this.reset();
+      } catch (error) {
+        showAlert('Error al guardar especialista', 'error');
+        console.error('Error:', error);
+      } finally {
+        hideLoading(submitBtn, originalBtnText);
+      }
+    });
+
+    // ===================== RECEPCIONISTAS =====================
+    async function loadRecepcionistas() {
+      try {
+        const response = await fetch('/api/recepcionistas');
+        if (!response.ok) throw new Error('Error al cargar recepcionistas');
+        
+        const recepcionistas = await response.json();
+        const tableBody = document.querySelector('#recepcionistasTable tbody');
+        
+        if (recepcionistas.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay recepcionistas registrados</td></tr>';
+          return;
+        }
+        
+        tableBody.innerHTML = '';
+        recepcionistas.forEach(recepcionista => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${recepcionista.cc || 'N/A'}</td>
+            <td>${recepcionista.nombre}</td>
+            <td>${recepcionista.correo}</td>
+            <td>${recepcionista.edad}</td>
+            <td>
+              <div class="actions">
+                <button onclick="editRecepcionista('${recepcionista.id}')" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-edit"></i> Editar
+                </button>
+                <button onclick="deleteRecepcionista('${recepcionista.id}')" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+              </div>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        document.querySelector('#recepcionistasTable tbody').innerHTML = `
+          <tr><td colspan="5" class="text-center">Error al cargar los datos</td></tr>
+        `;
+        console.error('Error:', error);
+      }
+    }
+
+    async function deleteRecepcionista(id) {
+      if (!confirm('¿Está seguro de que desea eliminar este recepcionista?')) return;
+      
+      try {
+        const response = await fetch(`/api/recepcionistas/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Error al eliminar recepcionista');
+        
+        showAlert('Recepcionista eliminado correctamente');
+        loadRecepcionistas();
+      } catch (error) {
+        showAlert('Error al eliminar recepcionista', 'error');
+        console.error('Error:', error);
+      }
+    }
+
+    function editRecepcionista(id) {
+      currentEditingId = id;
+      currentEditingType = 'recepcionista';
+      
+      const modalContent = `
+        <form id="editRecepcionistaForm">
+          <div class="form-group">
+            <label for="editRcCc">Cédula</label>
+            <input type="text" id="editRcCc" value="987654321" required>
+          </div>
+          <div class="form-group">
+            <label for="editRcNombre">Nombre</label>
+            <input type="text" id="editRcNombre" value="Nombre del recepcionista" required>
+          </div>
+          <div class="form-group">
+            <label for="editRcCorreo">Correo</label>
+            <input type="email" id="editRcCorreo" value="recepcion@ejemplo.com" required>
+          </div>
+          <div class="form-group">
+            <label for="editRcEdad">Edad</label>
+            <input type="number" id="editRcEdad" value="28" required>
+          </div>
+        </form>
+      `;
+      
+      openModal('Editar Recepcionista', modalContent);
+    }
+
+    document.querySelector('#recepcionistaForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      showLoading(submitBtn);
+      
+      try {
+        const recepcionista = {
+          cc: document.querySelector('#ccRecepcionista').value,
+          nombre: document.querySelector('#nombreRecepcionista').value,
+          correo: document.querySelector('#correoRecepcionista').value,
+          edad: document.querySelector('#edadRecepcionista').value,
+          contraseña: document.querySelector('#contraseñaRecepcionista').value
+        };
+
+        const response = await fetch('/api/recepcionistas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(recepcionista)
+        });
+
+        if (!response.ok) throw new Error('Error al guardar recepcionista');
+        
+        showAlert('Recepcionista agregado correctamente');
+        loadRecepcionistas();
+        this.reset();
+      } catch (error) {
+        showAlert('Error al guardar recepcionista', 'error');
+        console.error('Error:', error);
+      } finally {
+        hideLoading(submitBtn, originalBtnText);
+      }
+    });
+
+    // ===================== CITAS =====================
+    async function loadCitas() {
+      try {
+        const [citasRes, especialistasRes, serviciosRes] = await Promise.all([
+          fetch('/api/citas'),
+          fetch('/api/especialistas'),
+          fetch('/api/servicios')
+        ]);
+
+        if (!citasRes.ok || !especialistasRes.ok || !serviciosRes.ok) {
+          throw new Error('Error al cargar datos de citas');
+        }
+
+        const [citas, especialistas, servicios] = await Promise.all([
+          citasRes.json(),
+          especialistasRes.json(),
+          serviciosRes.json()
+        ]);
+
+        const especialistasMap = {};
+        especialistas.forEach(e => especialistasMap[e.id] = e.nombre);
+
+        const serviciosMap = {};
+        servicios.forEach(s => serviciosMap[s.id] = s.nombre);
+
+        const tableBody = document.querySelector('#citasTable tbody');
+        
+        if (citas.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No hay citas programadas</td></tr>';
+          return;
+        }
+        
+        tableBody.innerHTML = '';
+
+        citas.forEach(cita => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${cita.clienteNombre || 'N/A'}</td>
+            <td>${cita.clienteTelefono || 'N/A'}</td>
+            <td>${especialistasMap[cita.especialistaId] || 'No asignado'}</td>
+            <td>${serviciosMap[cita.servicioId] || 'Servicio no disponible'}</td>
+            <td>${cita.fecha ? new Date(cita.fecha).toLocaleDateString() : 'N/A'}</td>
+            <td>${cita.hora || 'N/A'}</td>
+            <td>
+              <span class="badge ${cita.estado === 'confirmada' ? 'badge-success' : 'badge-warning'}">
+                ${cita.estado || 'pendiente'}
+              </span>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        document.querySelector('#citasTable tbody').innerHTML = `
+          <tr><td colspan="7" class="text-center">Error al cargar las citas</td></tr>
+        `;
+        console.error('Error:', error);
+      }
+    }
+
+    // ===================== PROMOCIONES =====================
+    async function loadServiciosEnPromocionForm() {
+      try {
+        const response = await fetch('/api/servicios');
+        if (!response.ok) throw new Error('Error al cargar servicios');
+        
+        const servicios = await response.json();
+        const select1 = document.getElementById('servicio1');
+        const select2 = document.getElementById('servicio2');
+
+        select1.innerHTML = '<option value="">Seleccione Servicio 1</option>';
+        select2.innerHTML = '<option value="">Seleccione Servicio 2</option>';
+
+        servicios.forEach(servicio => {
+          const option1 = document.createElement('option');
+          option1.value = servicio.id;
+          option1.textContent = servicio.nombre;
+
+          const option2 = option1.cloneNode(true);
+
+          select1.appendChild(option1);
+          select2.appendChild(option2);
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    document.querySelector('#promocionForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      showLoading(submitBtn);
+      
+      try {
+        const promocion = {
+          servicio1Id: document.getElementById('servicio1').value,
+          servicio2Id: document.getElementById('servicio2').value,
+          precioPromocional: parseFloat(document.getElementById('precioPromocion').value),
+          fechaLimite: document.getElementById('fechaLimite').value
+        };
+
+        const response = await fetch('/api/promociones', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(promocion)
+        });
+
+        if (!response.ok) throw new Error('Error al crear promoción');
+        
+        showAlert('Promoción creada correctamente');
+        this.reset();
+        loadPromociones();
+      } catch (error) {
+        showAlert('Error al crear promoción', 'error');
+        console.error('Error:', error);
+      } finally {
+        hideLoading(submitBtn, originalBtnText);
+      }
+    });
+
+    async function loadPromociones() {
+      try {
+        const [promosRes, serviciosRes] = await Promise.all([
+          fetch('/api/promociones'),
+          fetch('/api/servicios')
+        ]);
+
+        if (!promosRes.ok || !serviciosRes.ok) {
+          throw new Error('Error al cargar datos de promociones');
+        }
+
+        const [promociones, servicios] = await Promise.all([
+          promosRes.json(),
+          serviciosRes.json()
+        ]);
+
+        const serviciosMap = {};
+        servicios.forEach(s => serviciosMap[s.id] = s.nombre);
+
+        const tableBody = document.querySelector('#promocionesTable tbody');
+        
+        if (promociones.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay promociones activas</td></tr>';
+          return;
+        }
+        
+        tableBody.innerHTML = '';
+
+        promociones.forEach(promo => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${serviciosMap[promo.servicio1Id] || 'Desconocido'}</td>
+            <td>${serviciosMap[promo.servicio2Id] || 'Desconocido'}</td>
+            <td>$${promo.precioPromocional.toFixed(2)}</td>
+            <td>${new Date(promo.fechaLimite).toLocaleDateString()}</td>
+            <td>
+              <div class="actions">
+                <button onclick="editPromocion('${promo.id}')" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-edit"></i> Editar
+                </button>
+                <button onclick="deletePromocion('${promo.id}')" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+              </div>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        document.querySelector('#promocionesTable tbody').innerHTML = `
+          <tr><td colspan="5" class="text-center">Error al cargar promociones</td></tr>
+        `;
+        console.error('Error:', error);
+      }
+    }
+
+    async function deletePromocion(id) {
+      if (!confirm('¿Estás seguro de eliminar esta promoción?')) return;
+      
+      try {
+        const response = await fetch(`/api/promociones/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Error al eliminar promoción');
+        
+        showAlert('Promoción eliminada correctamente');
+        loadPromociones();
+      } catch (error) {
+        showAlert('Error al eliminar promoción', 'error');
+        console.error('Error:', error);
+      }
+    }
+
+    function editPromocion(id) {
+      currentEditingId = id;
+      currentEditingType = 'promocion';
+      
+      const modalContent = `
+        <form id="editPromocionForm">
+          <div class="form-group">
+            <label for="editServicio1">Servicio 1</label>
+            <select id="editServicio1" required>
+              <option value="1" selected>Masaje Relajante</option>
+              <option value="2">Facial Rejuvenecedor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editServicio2">Servicio 2</label>
+            <select id="editServicio2" required>
+              <option value="1">Masaje Relajante</option>
+              <option value="2" selected>Facial Rejuvenecedor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editPrecio">Precio Promocional</label>
+            <input type="number" id="editPrecio" value="120.00" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="editFechaLimite">Fecha Límite</label>
+            <input type="date" id="editFechaLimite" value="2023-12-31" required>
+          </div>
+        </form>
+      `;
+      
+      openModal('Editar Promoción', modalContent);
+    }
+	
+	// ===================== SERVICIOS =====================
+	async function loadServicios() {
+	  try {
+	    const response = await fetch('/api/servicios');
+	    if (!response.ok) throw new Error('Error al cargar servicios');
+	    
+	    const servicios = await response.json();
+	    const tableBody = document.querySelector('#serviciosTable tbody');
+	    
+	    if (servicios.length === 0) {
+	      tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay servicios registrados</td></tr>';
+	      return;
+	    }
+	    
+	    tableBody.innerHTML = '';
+
+	    servicios.forEach(servicio => {
+	      const row = document.createElement('tr');
+	      row.innerHTML = `
+	        <td>${servicio.nombre}</td>
+	        <td>${servicio.duracionMinutos} min</td>
+	        <td>$${servicio.precio.toFixed(2)}</td>
+	        <td>${servicio.horarios.join(', ')}</td>
+	        <td>
+	          <div class="actions">
+	            <button onclick="editServicio('${servicio.id}')" class="btn btn-secondary btn-sm">
+	              <i class="fas fa-edit"></i> Editar
+	            </button>
+	            <button onclick="deleteServicio('${servicio.id}')" class="btn btn-danger btn-sm">
+	              <i class="fas fa-trash-alt"></i> Eliminar
+	            </button>
+	          </div>
+	        </td>
+	      `;
+	      tableBody.appendChild(row);
+	    });
+	  } catch (error) {
+	    document.querySelector('#serviciosTable tbody').innerHTML = 
+	      '<tr><td colspan="5" class="text-center">Error al cargar los servicios</td></tr>';
+	    console.error('Error:', error);
+	  }
+	}
+
+	async function deleteServicio(id) {
+	  if (!confirm('¿Está seguro de que desea eliminar este servicio?')) return;
+	  
+	  try {
+	    const response = await fetch(`/api/servicios/${id}`, { 
+	      method: 'DELETE' 
+	    });
+	    
+	    if (!response.ok) {
+	      const errorData = await response.json();
+	      throw new Error(errorData.message || 'Error al eliminar servicio');
+	    }
+	    
+	    showAlert('Servicio eliminado correctamente');
+	    loadServicios();
+	  } catch (error) {
+	    showAlert(error.message || 'Error al eliminar servicio', 'error');
+	    console.error('Error:', error);
+	  }
+	}
+
+	async function editServicio(id) {
+	  try {
+	    // Obtener los datos del servicio para prellenar el formulario
+	    const response = await fetch(`/api/servicios/${id}`);
+	    if (!response.ok) throw new Error('Error al cargar servicio');
+	    
+	    const servicio = await response.json();
+	    currentEditingId = id;
+	    currentEditingType = 'servicio';
+	    
+	    const modalContent = `
+	      <form id="editServicioForm">
+	        <div class="form-group">
+	          <label for="editNombreServicio">Nombre del Servicio</label>
+	          <input type="text" id="editNombreServicio" value="${servicio.nombre}" required>
+	        </div>
+	        <div class="form-group">
+	          <label for="editDuracionServicio">Duración (minutos)</label>
+	          <input type="number" id="editDuracionServicio" value="${servicio.duracionMinutos}" min="15" required>
+	        </div>
+	        <div class="form-group">
+	          <label for="editPrecioServicio">Precio ($)</label>
+	          <input type="number" id="editPrecioServicio" value="${servicio.precio}" min="0" step="0.01" required>
+	        </div>
+	        <div class="form-group">
+	          <label for="editHorariosServicio">Horarios (separados por coma)</label>
+	          <input type="text" id="editHorariosServicio" value="${servicio.horarios.join(', ')}" required>
+	        </div>
+	      </form>
+	    `;
+	    
+	    openModal('Editar Servicio', modalContent);
+	  } catch (error) {
+	    showAlert('Error al cargar servicio para edición', 'error');
+	    console.error('Error:', error);
+	  }
+	}
+
+	async function saveChanges() {
+	  const saveBtn = document.querySelector('#editModal .btn-primary');
+	  const originalBtnText = saveBtn.innerHTML;
+	  showLoading(saveBtn);
+	  
+	  try {
+	    if (currentEditingType === 'servicio') {
+	      const servicioData = {
+	        nombre: document.getElementById('editNombreServicio').value,
+	        duracionMinutos: parseInt(document.getElementById('editDuracionServicio').value),
+	        precio: parseFloat(document.getElementById('editPrecioServicio').value),
+	        horarios: document.getElementById('editHorariosServicio').value
+	          .split(',')
+	          .map(h => h.trim())
+	          .filter(h => h !== '')
+	      };
+
+	      // Validación básica
+	      if (!servicioData.nombre || isNaN(servicioData.duracionMinutos) || isNaN(servicioData.precio) || servicioData.horarios.length === 0) {
+	        throw new Error('Por favor complete todos los campos correctamente');
+	      }
+
+	      const response = await fetch(`/api/servicios/${currentEditingId}`, {
+	        method: 'PUT',
+	        headers: {
+	          'Content-Type': 'application/json',
+	        },
+	        body: JSON.stringify(servicioData)
+	      });
+
+	      if (!response.ok) {
+	        const errorData = await response.json();
+	        throw new Error(errorData.message || 'Error al actualizar servicio');
+	      }
+
+	      showAlert('Servicio actualizado correctamente');
+	      loadServicios();
+	      closeModal();
+	    }
+	  } catch (error) {
+	    showAlert(error.message || 'Error al guardar cambios', 'error');
+	    console.error('Error:', error);
+	  } finally {
+	    hideLoading(saveBtn, originalBtnText);
+	  }
+	}
+
+    // ===================== INITIALIZATION =====================
+    document.addEventListener('DOMContentLoaded', function() {
+      loadEspecialistas();
+      loadRecepcionistas();
+      loadCitas();
+      loadServiciosEnPromocionForm();
+      loadPromociones();
+	  loadServicios();
+    });
+  </script>
+</body>
+</html>
